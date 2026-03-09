@@ -9,12 +9,13 @@
 - **多种策略支持**：内置均线交叉、RSI、MACD、布林带等常用策略
 - **仓位控制**：支持固定仓位，金字塔、倒金字塔、ATR 等多种仓位管理方式
 - **参数优化**：网格搜索参数优化
+- **多策略比较**：快速
 
 ## 安装
 
 ```bash
-# 克隆项目
-git clone https://github.com/meepo-quant/finquant.git
+#比较不同策略表现 克隆项目
+git clone https://github.com/finvfamily/finquant.git
 cd finquant
 
 # 安装依赖
@@ -113,7 +114,7 @@ from finquant import (
     BacktestEngine,
     FixedPositionSizer,           # 固定仓位
     DynamicPositionSizer,          # 动态仓位
-    PyramidPositionSizer,          # 金字塔仓位
+    PyramidPositionSizer,         # 金字塔仓位（浮盈加仓）
     CounterPyramidPositionSizer,  # 倒金字塔仓位
 )
 
@@ -136,6 +137,15 @@ engine = BacktestEngine(
 )
 ```
 
+### 仓位控制策略对比
+
+| 策略 | 说明 | 适用场景 |
+|------|------|----------|
+| FixedPositionSizer | 固定仓位比例 | 稳健型投资者 |
+| DynamicPositionSizer | 动态仓位 | 灵活调整 |
+| PyramidPositionSizer | 金字塔仓位 | 趋势追踪，浮盈加仓 |
+| CounterPyramidPositionSizer | 倒金字塔仓位 | 越跌越买 |
+
 ## 参数优化
 
 ```python
@@ -147,8 +157,8 @@ data = get_kline(["000001"], start="2023-01-01", end="2024-12-31")
 
 # 定义参数网格
 param_grid = {
-    "short_period": [5, 10, 15],
-    "long_period": [20, 30, 40],
+    "short_period": [3, 5, 7, 10, 15],
+    "long_period": [20, 30, 40, 60],
 }
 
 # 运行优化
@@ -161,6 +171,9 @@ optimizer = GridSearchOptimizer(
 )
 
 results = optimizer.optimize(objective="sharpe_ratio")
+
+# 显示 TOP 10 结果
+print(results.head(10))
 
 # 获取最佳参数
 best_params = optimizer.get_best_params()
@@ -197,6 +210,19 @@ comparison = compare_strategies(results)
 print(comparison)
 ```
 
+## 运行示例
+
+```bash
+# 基础示例
+python examples/basic_example.py
+
+# 仓位控制测试
+python test_position.py
+
+# 参数优化示例
+python examples/optimize_example.py
+```
+
 ## API 参考
 
 ### 数据获取
@@ -209,13 +235,13 @@ print(comparison)
 
 ### 策略
 
-| 策略类 | 说明 |
-|--------|------|
-| `MACrossStrategy` | 均线交叉策略 |
-| `RSIStrategy` | RSI 策略 |
-| `MACDStrategy` | MACD 策略 |
-| `BollStrategy` | 布林带策略 |
-| `DualEMAStrategy` | 双重 EMA 策略 |
+| 策略类 | 说明 | 主要参数 |
+|--------|------|----------|
+| `MACrossStrategy` | 均线交叉策略 | short_period, long_period |
+| `RSIStrategy` | RSI 策略 | period, oversold,| `MACD overbought |
+Strategy` | MACD 策略 | fast_period, slow_period, signal_period |
+| `BollStrategy` | 布林带策略 | period, std_dev |
+| `DualEMAStrategy` | 双重 EMA 策略 | short_period, long_period |
 
 ### 仓位控制
 
@@ -231,12 +257,12 @@ print(comparison)
 ```python
 result.total_return     # 总收益率
 result.annual_return    # 年化收益率
-result.max_drawdown    # 最大回撤
-result.sharpe_ratio    # 夏普比率
-result.win_rate        # 胜率
-result.total_trades    # 交易次数
-result.trades          # 交易记录列表
-result.get_trades_df() # 交易记录 DataFrame
+result.max_drawdown     # 最大回撤
+result.sharpe_ratio     # 夏普比率
+result.win_rate         # 胜率
+result.total_trades     # 交易次数
+result.trades           # 交易记录列表
+result.get_trades_df()  # 交易记录 DataFrame
 ```
 
 ## 依赖
@@ -249,6 +275,7 @@ result.get_trades_df() # 交易记录 DataFrame
 
 - 官方网站: [https://meepoquant.com](https://meepoquant.com)
 - finshare 数据源: [https://meepoquant.com](https://meepoquant.com)
+- GitHub: https://github.com/finvfamily/finquant
 
 ## License
 
