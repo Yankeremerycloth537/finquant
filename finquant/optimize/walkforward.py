@@ -64,7 +64,7 @@ class GridSearchOptimizer:
             strategy = self.strategy_class(**params)
 
             # 运行回测
-            engine = BacktestEngineV2(BacktestConfig(initial_capital=100000))
+            engine = BacktestEngineV2(BacktestConfig(initial_capital=1000000))
             engine.add_strategy(strategy)
 
             try:
@@ -212,8 +212,9 @@ class WalkForwardOptimizer:
 
             # 运行测试
             from finquant.core.engine import BacktestEngineV2 as BacktestEngine
+            from finquant.core.engine import BacktestConfig
             strategy = strategy_class(**best_params)
-            engine = BacktestEngine()
+            engine = BacktestEngine(BacktestConfig(initial_capital=1000000))
             engine.add_strategy(strategy)
             result = engine.run(test_data)
 
@@ -248,12 +249,14 @@ def walk_forward_optimize(
     train_days: int = 252,
     test_days: int = 63,
     step_days: int = 21,
+    objective: str = "sharpe_ratio",
+    verbose: bool = True,
 ) -> pd.DataFrame:
     """
     Walk-Forward 优化便捷函数
     """
     optimizer = WalkForwardOptimizer(train_days, test_days, step_days)
-    return optimizer.optimize(data, strategy_class, param_grid)
+    return optimizer.optimize(data, strategy_class, param_grid, objective, verbose)
 
 
 __all__ = [

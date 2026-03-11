@@ -8,10 +8,20 @@ from typing import Union, List, Dict, Optional, Any
 import pandas as pd
 
 from finquant.core.engine import BacktestEngineV2, BacktestConfig
-from finquant.strategy.base import Strategy, Action, Signal
+from finquant.strategy.base import Strategy as BaseStrategy, Action, Signal
+from finquant.strategy.v2 import Strategy as V2Strategy
 from finquant.strategy import get_vectorized_strategy
 from finquant.result import BacktestResult
 from finquant.data import get_kline as _get_kline
+
+# 创建联合类型用于类型提示
+Strategy = BaseStrategy  # 兼容
+
+
+# 兼容两种 Strategy 类
+def _is_strategy(obj):
+    """检查对象是否是策略类"""
+    return isinstance(obj, (BaseStrategy, V2Strategy))
 
 
 # ========== 核心函数 ==========
@@ -104,7 +114,7 @@ def backtest(
     elif isinstance(strategy, type):
         # 策略类
         strategy = strategy(**strategy_kwargs)
-    elif not isinstance(strategy, Strategy):
+    elif not _is_strategy(strategy):
         raise ValueError(f"无效的策略类型: {type(strategy)}")
 
     # 3. 运行回测

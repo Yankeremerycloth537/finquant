@@ -25,6 +25,13 @@ from finquant.trading.broker.eastmoney import (
     get_realtime_quote,
 )
 
+from finquant.trading.broker.huatai import (
+    HuataiConfig,
+    HuataiBroker,
+    HuataiSimulatedBroker,
+    create_huatai_broker,
+)
+
 __all__ = [
     # base
     "BrokerOrderStatus",
@@ -43,4 +50,9 @@ __all__ = [
     "SimulatedLiveBroker",
     "create_simulated_broker",
     "get_realtime_quote",
+    # huatai
+    "HuataiConfig",
+    "HuataiBroker",
+    "HuataiSimulatedBroker",
+    "create_huatai_broker",
 ]

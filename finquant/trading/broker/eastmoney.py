@@ -323,6 +323,10 @@ class SimulatedLiveBroker:
         """获取行情"""
         return self._quotes.get(code)
 
+    def is_available(self) -> bool:
+        """检查是否可用"""
+        return self._initialized
+
     def close(self):
         """关闭"""
         self._quote_running = False

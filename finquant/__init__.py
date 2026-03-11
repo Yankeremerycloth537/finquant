@@ -177,11 +177,50 @@ from finquant.trading.broker import (
     SimulatedLiveBroker,
     create_simulated_broker,
     get_realtime_quote,
+    HuataiConfig,
+    HuataiBroker,
+    HuataiSimulatedBroker,
+    create_huatai_broker,
 )
 
 # ========== 结果 ==========
 
 from finquant.result import BacktestResult, compare_strategies
+
+
+
+# ========== 研究模块 ==========
+
+from finquant.research import (
+    # IC分析
+    FactorICAnalyzer,
+    GroupICAnalyzer,
+    ICResult,
+    calc_ic,
+    calc_rank_ic,
+    analyze_factors,
+    # 分组回测
+    FactorBacktest,
+    RollingGroupBacktest,
+    GroupResult,
+    BacktestResult,
+    factor_backtest,
+    # 相关性分析
+    FactorCorrelation,
+    RollingCorrelation,
+    FactorOrthogonalizer,
+    CorrelationResult,
+    factor_correlation,
+    orthogonalize_factor,
+    # 因子合成
+    FactorSynthesizer,
+    SynthesisResult,
+    synthesize_factors,
+    # QuantLab
+    QuantLab,
+    LabConfig,
+    create_lab,
+)
 
 __all__ = [
     # 核心
@@ -281,6 +320,17 @@ __all__ = [
     "SimulatedLiveBroker",
     "create_simulated_broker",
     "get_realtime_quote",
+    "HuataiConfig",
+    "HuataiBroker",
+    "HuataiSimulatedBroker",
+    "create_huatai_broker",
+    # 交互控制台
+    "TradingConsole",
+    "start_console",
+    "ConfigStore",
+    "get_config_store",
+    "BrokerManager",
+    "get_broker_manager",
     # API
     "bt",
     "compare",
@@ -295,4 +345,31 @@ __all__ = [
     # 结果
     "BacktestResult",
     "compare_strategies",
+    # 研究模块 - IC分析
+    "FactorICAnalyzer",
+    "GroupICAnalyzer",
+    "ICResult",
+    "calc_ic",
+    "calc_rank_ic",
+    "analyze_factors",
+    # 研究模块 - 分组回测
+    "FactorBacktest",
+    "RollingGroupBacktest",
+    "GroupResult",
+    "factor_backtest",
+    # 研究模块 - 相关性分析
+    "FactorCorrelation",
+    "RollingCorrelation",
+    "FactorOrthogonalizer",
+    "CorrelationResult",
+    "factor_correlation",
+    "orthogonalize_factor",
+    # 研究模块 - 因子合成
+    "FactorSynthesizer",
+    "SynthesisResult",
+    "synthesize_factors",
+    # QuantLab
+    "QuantLab",
+    "LabConfig",
+    "create_lab",
 ]
