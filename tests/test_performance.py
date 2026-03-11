@@ -15,11 +15,11 @@ import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
 
-# V1 策略（旧版本）
-from finquant.strategies import MACrossStrategy as MACrossStrategyV1
+# V1 策略（旧版本）- 使用 V2 替代
+from finquant.strategy import MAStrategy as MACrossStrategyV1
 
 # V2 策略（新版本）
-from finquant.strategies_v2 import MAStrategy as MAStrategyV2
+from finquant.strategy.v2 import MAStrategy as MAStrategyV2
 
 
 def generate_mock_data(
