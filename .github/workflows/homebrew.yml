@@ -16,11 +16,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
       - name: Get version
         id: version
         run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
@@ -28,7 +23,7 @@ jobs:
           GITHUB_REF_NAME: ${{ github.ref_name }}
 
       - name: Create Pull Request
-        uses: homebrew/actions/create-pull-request@v5
+        uses: homebrew/actions/create-pull-request@v4
         with:
           message: |
             Update finquant to ${{ steps.version.outputs.VERSION }}
@@ -36,5 +31,3 @@ jobs:
             Created by GitHub Actions
           token: ${{ secrets.HOMEBREW_TAP_TOKEN }}
           tap: meepo-quant/tap
-          formula: finquant
-          directory: .
