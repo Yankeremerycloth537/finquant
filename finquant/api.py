@@ -17,9 +17,11 @@ from finquant.data import get_kline as _get_kline
 # ========== 核心函数 ==========
 
 def backtest(
-    data: Union[str, pd.DataFrame],
-    strategy: Union[str, Strategy, type],
-    initial_capital: float = 100000,
+    data: Union[str, pd.DataFrame, List] = None,
+    strategy: Union[str, Strategy, type] = None,
+    code: Union[str, List] = None,
+    codes: Union[str, List] = None,
+    initial_capital: float = 1000000,
     start: str = None,
     end: str = None,
     **kwargs
@@ -35,6 +37,7 @@ def backtest(
             - str: 策略名称，如 "ma_cross", "rsi"
             - Strategy: 策略实例
             - type: 策略类
+        code: 股票代码（可选，与 data 二选一）
         initial_capital: 初始资金
         start: 开始日期
         end: 结束日期
@@ -47,6 +50,9 @@ def backtest(
         # 代码 + 策略字符串
         result = backtest("SH600519", "ma_cross", short=5, long=20)
 
+        # 使用 code 参数
+        result = backtest(code="SH600519", strategy="ma_cross", short=5, long=20)
+
         # 数据 + 策略实例
         data = get_kline("SH600519", start="2020-01-01")
         result = backtest(data, MAStrategy(short=5, long=20))
@@ -55,18 +61,40 @@ def backtest(
         result = backtest("SH600519", MyStrategy())
     """
     # 1. 处理数据
-    if isinstance(data, str):
-        # 股票代码，下载数据
+    # 支持 code, codes 参数
+    if codes:
+        # 多个代码
+        if isinstance(codes, str):
+            codes = [codes]
+        data = _get_kline(codes, start=start, end=end)
+    elif code:
+        # 单个代码
+        if isinstance(code, list):
+            data = _get_kline(code, start=start, end=end)
+        else:
+            data = _get_kline(code, start=start, end=end)
+    elif isinstance(data, str):
+        # 股票代码字符串，下载数据
         data = _get_kline(data, start=start, end=end)
 
     if data is None or data.empty:
         raise ValueError("数据为空")
 
     # 2. 处理策略
-    # 先尝试创建策略，获取可能需要的参数
+    # 参数别名映射
+    param_aliases = {
+        'short': 'short_period',
+        'long': 'long_period',
+        'ema_short': 'ema_period_short',
+        'ema_long': 'ema_period_long',
+    }
+
+    # 转换参数别名
+    kwargs = {param_aliases.get(k, k): v for k, v in kwargs.items()}
+
     known_params = {'short_period', 'long_period', 'period', 'oversold', 'overbought',
                    'fast_period', 'slow_period', 'signal_period', 'std_dev',
-                   'short', 'long', 'ema_short', 'ema_long'}
+                   'ema_period_short', 'ema_period_long'}
     strategy_kwargs = {k: v for k, v in kwargs.items() if k in known_params}
     config_kwargs = {k: v for k, v in kwargs.items() if k not in known_params}
 

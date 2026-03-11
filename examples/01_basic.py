@@ -15,11 +15,28 @@ def example_one_liner():
     print("方式一：一行代码回测")
     print("="*60)
 
+    # 多品类标的
+    codes = [
+        # ETF
+        "SH510300",  # 沪深300ETF
+        "SH512880",  # 证券ETF
+        # LOF
+        "SH161039",  # 易方达创业板LOF
+        # 主板
+        "SH600519",  # 茅台
+        "SH600036",  # 招商银行
+        # 创业板
+        "SZ300750",  # 宁德时代
+        "SZ300059",  # 东方财富
+        # 科创板
+        "SH688981",  # 中芯国际
+        "SH688111",  # 华大基因
+    ]
     # 使用 bt 函数一行代码完成回测
     from finquant import bt
 
     result = bt(
-        code="SH600519",      # 股票代码
+        codes=codes,      # 股票代码
         strategy="ma_cross",  # 策略名称
         short=5,              # 短期均线
         long=20,              # 长期均线
@@ -182,7 +199,7 @@ def example_compare():
 
 if __name__ == "__main__":
     # 选择运行哪个示例
-    example_engine()
+    # example_engine()
 
     # 一行代码
     # example_one_liner()
@@ -191,4 +208,4 @@ if __name__ == "__main__":
     # example_api()
 
     # 多策略比较
-    # example_compare()
+    example_compare()

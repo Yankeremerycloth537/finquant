@@ -153,7 +153,24 @@ def example_ma_strategy():
     # 回测
     from finquant.core import BacktestEngineV2, BacktestConfig
 
-    data = get_kline(["SH600519"], start="2024-01-01", end="2025-01-01")
+    # 多品类标的
+    codes = [
+        # ETF
+        "SH510300",  # 沪深300ETF
+        "SH512880",  # 证券ETF
+        # LOF
+        "SH161039",  # 易方达创业板LOF
+        # 主板
+        "SH600519",  # 茅台
+        "SH600036",  # 招商银行
+        # 创业板
+        "SZ300750",  # 宁德时代
+        "SZ300059",  # 东方财富
+        # 科创板
+        "SH688981",  # 中芯国际
+        "SH688111",  # 华大基因
+    ]
+    data = get_kline(codes, start="2024-01-01", end="2025-01-01")
 
     engine = BacktestEngineV2(BacktestConfig(initial_capital=100000))
     engine.add_strategy(DualMAStrategy(short=5, long=20))
@@ -225,7 +242,25 @@ def example_rsi_strategy():
     # 回测
     from finquant.core import BacktestEngineV2, BacktestConfig
 
-    data = get_kline(["SH600519"], start="2024-01-01", end="2025-01-01")
+    # 多品类标的
+    codes = [
+        # ETF
+        "SH510300",  # 沪深300ETF
+        "SH512880",  # 证券ETF
+        # LOF
+        "SH161039",  # 易方达创业板LOF
+        # 主板
+        "SH600519",  # 茅台
+        "SH600036",  # 招商银行
+        # 创业板
+        "SZ300750",  # 宁德时代
+        "SZ300059",  # 东方财富
+        # 科创板
+        "SH688981",  # 中芯国际
+        "SH688111",  # 华大基因
+    ]
+
+    data = get_kline(codes, start="2024-01-01", end="2025-01-01")
 
     engine = BacktestEngineV2(BacktestConfig(initial_capital=100000))
     engine.add_strategy(RSIStrategy(period=14, oversold=30, overbought=70))
@@ -371,10 +406,10 @@ def example_volume_strategy():
 
 if __name__ == "__main__":
     # 选择运行哪个示例
-    example_ma_strategy()
+    # example_ma_strategy()
 
     # 其他示例
     # example_basic_strategy()
-    # example_rsi_strategy()
+    example_rsi_strategy()
     # example_boll_strategy()
     # example_volume_strategy()
